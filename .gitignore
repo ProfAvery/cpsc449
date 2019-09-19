@@ -82,7 +82,9 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
-.env
+# 
+# We want to hold onto .env files
+# .env
 .venv
 env/
 venv/
@@ -102,3 +104,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Project-specific
+books.db
