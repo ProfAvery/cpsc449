@@ -56,7 +56,11 @@ def all_books():
 
 @app.route('/api/v1/resources/books/<int:id>', methods=['GET'])
 def book(id):
-    return queries.book_by_id(id=id)
+    book = queries.book_by_id(id=id)
+    if book:
+        return book
+    else:
+        raise exceptions.NotFound()
 
 
 @app.route('/api/v1/resources/books', methods=['GET', 'POST'])
