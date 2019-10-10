@@ -1,6 +1,6 @@
 # Science Fiction Novel API from "Creating Web APIs with Python and Flask"
 # <https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask>.
-# 
+#
 # What's new:
 #
 #  * Database specified in app config file

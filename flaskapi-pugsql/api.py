@@ -1,6 +1,6 @@
 # Science Fiction Novel API from "Creating Web APIs with Python and Flask"
 # <https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask>.
-# 
+#
 # What's new:
 #
 #  * Switched from Flask to Flask API
@@ -19,7 +19,6 @@
 #    - POST /api/v1/resources/books to create a new book
 #
 
-import sys
 import flask_api
 from flask import request
 from flask_api import status, exceptions
@@ -72,7 +71,6 @@ def books():
 
 
 def create_book(book):
-    book = request.data
     required_fields = ['published', 'author', 'title', 'first_sentence']
 
     if not all([field in book for field in required_fields]):
