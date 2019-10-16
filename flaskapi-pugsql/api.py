@@ -79,8 +79,10 @@ def create_book(book):
         book['id'] = queries.create_book(**book)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
-        
-    return book, status.HTTP_201_CREATED
+
+    return book, status.HTTP_201_CREATED, {
+        'Location': f'/api/v1/resources/books/{book["id"]}'
+    }
 
 
 def filter_books(query_parameters):
