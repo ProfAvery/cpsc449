@@ -1,6 +1,6 @@
--- $ sqlite3 books.db < sqlite.sql
+-- $ sqlite3 books.db < books.sql
 
-PRAGMA foreign_keys=OFF;
+PRAGMA foreign_keys=ON;
 BEGIN TRANSACTION;
 DROP TABLE IF EXISTS books;
 CREATE TABLE books (
