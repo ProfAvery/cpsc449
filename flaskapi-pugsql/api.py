@@ -50,6 +50,7 @@ def home():
 @app.route('/api/v1/resources/books/all', methods=['GET'])
 def all_books():
     all_books = queries.all_books()
+
     return list(all_books)
 
 
