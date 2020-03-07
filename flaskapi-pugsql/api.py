@@ -72,10 +72,12 @@ def books():
 
 
 def create_book(book):
-    required_fields = ['published', 'author', 'title', 'first_sentence']
+    posted_fields = {*book.keys()}
+    required_fields = {'published', 'author', 'title', 'first_sentence'}
 
-    if not all([field in book for field in required_fields]):
-        raise exceptions.ParseError()
+    if not required_fields <= posted_fields:
+        message = f'Missing fields: {required_fields - posted_fields}'
+        raise exceptions.ParseError(message)
     try:
         book['id'] = queries.create_book(**book)
     except Exception as e:
