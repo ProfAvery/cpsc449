@@ -35,7 +35,7 @@ queries.connect(app.config['DATABASE_URL'])
 @app.cli.command('init')
 def init_db():
     with app.app_context():
-        db = queries._engine.raw_connection()
+        db = queries.engine.raw_connection()
         with app.open_resource('books.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
@@ -110,6 +110,6 @@ def filter_books(query_parameters):
 
     query = query[:-4] + ';'
 
-    results = queries._engine.execute(query, to_filter).fetchall()
+    results = queries.engine.execute(query, to_filter).fetchall()
 
     return list(map(dict, results))
