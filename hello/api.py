@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def show_form():
-    return redirect(url_for('static', filename='form.html'), code=301)
+    return redirect(url_for('static', filename='form.html'))
 
 
 @app.route('/greet', methods=['POST'])
