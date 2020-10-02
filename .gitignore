@@ -82,7 +82,7 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
-# 
+#
 # We want to hold onto .env files
 # .env
 .venv
@@ -105,5 +105,17 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# VisualStudioCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
 # Project-specific
 books.db
+kv.db
