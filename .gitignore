@@ -119,3 +119,4 @@ venv.bak/
 # Project-specific
 books.db
 kv.db
+mockroblog.db
