@@ -40,6 +40,9 @@ INSERT INTO posts(user_id, text) VALUES(2, 'If academia were a video game, then 
 INSERT INTO posts(user_id, text) VALUES(2, 'I keep seeing video from before COVID, of people not needing to mask or distance, and doing something like waiting in line at Burger King. YOU''RE WASTING IT!');
 INSERT INTO posts(user_id, text) VALUES(3, '#cpsc315 #engr190w NeurIPS is $25 for students and $100 for non-students this year! https://medium.com/@NeurIPSConf/neurips-registration-opens-soon-67111581de99');
 
+CREATE INDEX IF NOT EXISTS post_user_id_idx ON posts(user_id);
+CREATE INDEX IF NOT EXISTS post_timestamp_idx ON posts(timestamp);
+
 CREATE VIEW IF NOT EXISTS home
 AS
     SELECT users.username, friends.username as friendname, text, timestamp
