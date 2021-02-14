@@ -19,6 +19,8 @@
 #    - POST /api/v1/resources/books to create a new book
 #
 
+import textwrap
+
 import flask_api
 from flask import request
 from flask_api import status, exceptions
@@ -43,8 +45,10 @@ def init_db():
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Distant Reading Archive</h1>
-<p>A prototype API for distant reading of science fiction novels.</p>'''
+    return textwrap.dedent('''
+        <h1>Distant Reading Archive</h1>
+        <p>A prototype API for distant reading of science fiction novels.</p>\n
+    ''')
 
 
 @app.route('/api/v1/resources/books/all', methods=['GET'])

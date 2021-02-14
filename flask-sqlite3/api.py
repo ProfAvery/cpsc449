@@ -9,9 +9,11 @@
 #    <https://flask.palletsprojects.com/en/1.1.x/patterns/sqlite3/>
 #
 
+import sqlite3
+import textwrap
+
 import flask
 from flask import request, jsonify, g
-import sqlite3
 
 
 app = flask.Flask(__name__)
@@ -56,8 +58,10 @@ def init_db():
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Distant Reading Archive</h1>
-<p>A prototype API for distant reading of science fiction novels.</p>'''
+    return textwrap.dedent('''
+        <h1>Distant Reading Archive</h1>
+        <p>A prototype API for distant reading of science fiction novels.</p>\n
+    ''')
 
 
 @app.route('/api/v1/resources/books/all', methods=['GET'])
