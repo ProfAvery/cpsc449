@@ -101,21 +101,3 @@ be preferable.
 > $ http POST localhost:5000/posts/ user_id=4 text='This is a test.'
 > ```
 
-### Skeleton code for the Timelines API
-
-Alternatively, if you wish to implement the Timelines API yourself
-in Python, the `timelines/` directory contains skeleton code for a
-microservice that exposes the original API.
-
-The skeleton code:
-
-* includes the [Flask SQLite 3 helper
-  routines](https://flask.palletsprojects.com/en/1.1.x/patterns/sqlite3/)
-
-* sets the database to `mockroblog.db`
-
-* provides routes and API functions for all methods in the original
-  Timelines API
-
-* hard-codes all methods to return an empty JSON object or list
-
