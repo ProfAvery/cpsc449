@@ -119,6 +119,9 @@ def search(db):
 def create_book(db):
     book = request.json
 
+    if not book:
+        abort(400)
+
     posted_fields = book.keys()
     required_fields = {'published', 'author', 'title', 'first_sentence'}
 
