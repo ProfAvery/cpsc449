@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # $ http POST 127.0.0.1:5000/greet first_name=Prof last_name=Avery
 
 from flask import Flask, redirect, url_for, request, jsonify

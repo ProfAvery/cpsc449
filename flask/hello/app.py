@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # See <https://code-maven.com/using-templates-in-flask>
 
 from flask import Flask, request, render_template
