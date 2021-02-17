@@ -22,7 +22,6 @@ plugin = sqlite.Plugin(app.config['sqlite.dbfile'])
 app.install(plugin)
 
 logging.config.fileConfig(app.config['logging.config'])
-logger = logging.getLogger(__name__)
 
 
 # Return errors in JSON
