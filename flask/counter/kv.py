@@ -19,12 +19,7 @@ DB = {}
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        backing_store = app.config.get('DBM', ':memory:')
-        if backing_store == ':memory:':
-            db = DB
-        else:
-            db = shelve.open(backing_store)
-        g._database = db
+        db = g._database = shelve.open(app.config['KV_DBM'])
     return db
 
 
@@ -32,8 +27,7 @@ def get_db():
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
-        if not isinstance(db, dict):
-            db.close()
+        db.close()
 
 # Set
 # http $DB_URL foo=bar

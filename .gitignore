@@ -121,5 +121,5 @@ venv.bak/
 
 # Project-specific
 books.db
-kv.db
+kv.dbm
 mockroblog.db

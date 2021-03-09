@@ -1,9 +1,10 @@
-# Simple in-memory key-value store
+# Simple persistent key-value store
 #
 # Inspired by <https://docs.repl.it/misc/database>
 #
 
 import sys
+import shelve
 import logging.config
 
 import bottle
@@ -15,7 +16,19 @@ app.config.load_config('./etc/kv.ini')
 
 logging.config.fileConfig(app.config['logging.config'])
 
-DB = {}
+
+# Make sure that each route has bottle.local.db set
+def shelf(callback):
+    def wrapper(*args, **kwargs):
+        with shelve.open(app.config['shelve.dbmfile']) as db:
+            bottle.local.db = db
+            body = callback(*args, **kwargs)
+            bottle.local.db = None
+        return body
+    return wrapper
+
+
+app.install(shelf)
 
 
 # Return errors in JSON
@@ -49,26 +62,30 @@ def set_key():
     req = request.json
     if not req:
         abort(400)
+    db = bottle.local.db
     for key in req.keys():
-        DB[key] = req[key]
+        db[key] = req[key]
     return req
 
 # http localhost:5100/foo
 @get('/<key>')
 def get_key(key):
-    return {key: DB.get(key)}
+    db = bottle.local.db
+    return {key: db.get(key)}
 
 # http DELETE localhost:5100/foo
 @delete('/<key>')
 def delete_key(key):
-    return {key: DB.pop(key, None)}
+    db = bottle.local.db
+    return {key: db.pop(key, None)}
 
 
 # http localhost:5100
 # http localhost:5100?prefix=f
 @get('/')
 def match():
-    keys = DB.keys()
+    db = bottle.local.db
+    keys = db.keys()
     prefix = request.query.get('prefix')
     if prefix:
         matches = [k for k in keys if k.startswith(prefix)]
