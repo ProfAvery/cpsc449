@@ -27,16 +27,28 @@ if not sys.warnoptions:
 
 @get('/')
 def show_form():
-    count = request.get_cookie('count', default='0')
+    count1 = request.get_cookie('count1', default='0')
+    count2 = request.get_cookie('count2', default='0')
 
-    count = int(count) + 1
-    response.set_cookie('count', str(count))
+    count1 = int(count1) + 1
 
-    return template('counter.html', counter=count)
+    response.set_cookie('count1', str(count1))
+
+    return template('counter.tpl', counter1=count1, counter2=count2)
+
+
+@post('/increment')
+def increment_count2():
+    count2 = request.get_cookie('count2', default='0')
+    count2 = int(count2) + 1
+    response.set_cookie('count2', str(count2))
+
+    return redirect('/')
 
 
 @post('/reset')
-def reset_count():
-    response.delete_cookie('count')
+def reset_counts():
+    response.delete_cookie('count1')
+    response.delete_cookie('count2')
 
     return redirect('/')
