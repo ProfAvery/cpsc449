@@ -27,77 +27,33 @@ See the following references for more information:
 * [http](https://httpie.org/)
 * [jq](https://stedolan.github.io/jq/)
 
-## API Implementations
+## Client-side API
 
-As a reminder, here is the API we were originally hoping to implement:
+As a reminder, here is the original API client contract:
 
 API call                                     | Action
 -------------------------------------------- | -----------------------------------------------------------------------------------------------------------
 `createUser(username, email, password)`      | Registers a new user account.
-`authenticateUser(username, password)`       | Returns true if the supplied password matches the hashed password stored for that username in the database.
+`authenticateUser(username, password)`       | Returns true if the password parameter matches the password stored for that username.
 `addFollower(username, usernameToFollow)`    | Start following a new user.
 `removeFollower(username, usernameToRemove)` | Stop following a user.
-`getUserTimeline(username)`                  | Returns recent tweets from a user.
-`getPublicTimeline()`                        | Returns recent tweets from all users.
-`getHomeTimeline(username)`                  | Returns recent tweets from all users that this user follows.
+`getUserTimeline(username)`                  | Returns recent posts from a user.
+`getPublicTimeline()`                        | Returns recent posts from all users.
+`getHomeTimeline(username)`                  | Returns recent posts from all users that this user follows.
 `postTweet(username, text)`                  | Post a new tweet.
 
-### Our mock API
+### Server-side API implementations
 
 The effect of each of these API calls can be duplicated by connecting
-`sandman2` and Datasette to `mockroblog.db` and calling those APIs.
+`sandman2` and Datasette to SQLite databases and calling the APIs supplied
+by those tools.
 
 Note that this is *not* as nice an experience as using a well-designed
 custom API. There are multiple cases where `sandman2` requires a
 primary key (e.g. user ID) where a different key (e.g. username) would
 be preferable.
 
-**`createUser(username, email, password)`**
-
-> ```shell-session
-> $ http localhost:5000/users/ username=tester email=test@example.com password=testing
-> ```
-
-**`authenticateUser(username, password)`**
-
-> ```shell-session
-> $ http 'localhost:5000/users/?username=ProfAvery&password=password'
-> ```
-
-**`addFollower(username, usernameToFollow)`**
-
-> ```shell-session
-> $ http POST localhost:5000/followers/ follower_id=4 following_id=2
-> ```
-
-**`removeFollower(username, usernameToRemove)`**
-
-> ```shell-session
-> $ id=$(http 'localhost:5000/followers/?follower_id=4&following_id=2' | jq .resources[0].id)
-> $ http DELETE localhost:5000/followers/$id
-> ```
-
-**`getUserTimeline(username)`**
-
-> ```shell-session
-> $ http 'localhost:5100/mockroblog/posts.json?_facet=user_id&user_id=1&_sort_desc=timestamp&_labels=on&_shape=array'
-> ```
-
-**`getPublicTimeline()`**
-
-> ```shell-session
-> $ http localhost:5000/posts/?sort=-timestamp
-> ```
-
-**`getHomeTimeline(username)`**
-
-> ```shell-session
-> $ http 'localhost:5100/mockroblog/home.json?_facet=username&username=ProfAvery&_shape=array'
-> ```
-
-**`postTweet(username, text)`**
-
-> ```shell-session
-> $ http POST localhost:5000/posts/ user_id=4 text='This is a test.'
-> ```
+There are two different versions:
+ * `single-db/`: one database with tables connected by foreign keys
+ * `separate-dbs/`: two databases, one for users and one for posts
 
