@@ -26,7 +26,7 @@ logging.config.fileConfig(app.config['logging.config'])
 
 # Return errors in JSON
 #
-# Adapted from # <https://stackoverflow.com/a/39818780>
+# Adapted from <https://stackoverflow.com/a/39818780>
 #
 def json_error_handler(res):
     if res.content_type == 'application/json':
