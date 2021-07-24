@@ -45,10 +45,14 @@ CREATE INDEX IF NOT EXISTS post_timestamp_idx ON posts(timestamp);
 
 CREATE VIEW IF NOT EXISTS home
 AS
-    SELECT users.username, friends.username as friendname, text, timestamp
-    FROM users, followers, users AS friends, posts
+    SELECT
+        users.username, friends.username as friendname, text, timestamp
+    FROM
+        users, followers, users AS friends, posts
     WHERE
         users.id = followers.follower_id AND
         followers.following_id = friends.id AND
-        friends.id = posts.user_id;
+        friends.id = posts.user_id
+    ORDER BY
+        timestamp DESC;
 
