@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify, abort, g
+from flask import request, jsonify, g
 import sqlite3
 
 app = flask.Flask(__name__)
@@ -35,7 +35,7 @@ def query_db(query, args=(), one=False):
 
 @app.route('/<string:username>/home')
 def getHomeTimeline(username):
-    app.logger.debug(f'getHomeTimeline(%r)', username)
+    app.logger.debug('getHomeTimeline(%r)', username)
     return jsonify([])
 
 
@@ -46,11 +46,11 @@ def getPublicTimeline():
 
 
 def getUserTimeline(username):
-    app.logger.debug(f'getUserTimeline(%r)', username)
+    app.logger.debug('getUserTimeline(%r)', username)
 
 
 def postTweet(username, text):
-    app.logger.debug(f'postTweet(%r, %r)', username, text)
+    app.logger.debug('postTweet(%r, %r)', username, text)
 
 
 @app.route('/<string:username>/', methods=['GET', 'POST'])

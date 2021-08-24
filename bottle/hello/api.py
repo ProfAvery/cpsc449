@@ -2,6 +2,7 @@
 
 from bottle import get, post, static_file, redirect, request
 
+
 @get('/')
 def show_form():
     return redirect('/static/form.html')

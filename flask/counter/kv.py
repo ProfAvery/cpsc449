@@ -29,6 +29,7 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+
 # Set
 # http $DB_URL foo=bar
 @app.route('/', methods=['POST'])
@@ -40,11 +41,13 @@ def set_key():
         get_db()[key] = req[key]
     return jsonify(req)
 
+
 # Get
 # http $DB_URL/foo
 @app.route('/<key>')
 def get_key(key):
     return jsonify({key: get_db().get(key)})
+
 
 # Delete
 # http DELETE $DB_URL/foo

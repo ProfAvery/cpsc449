@@ -3,7 +3,6 @@ import uuid
 
 from flask.sessions import SessionInterface, SessionMixin
 from werkzeug.datastructures import CallbackDict
-import requests
 
 
 class SessionStore:

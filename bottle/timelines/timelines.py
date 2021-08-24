@@ -1,6 +1,5 @@
 import sys
 import logging.config
-import sqlite3
 
 import bottle
 from bottle import get, post, request, response, abort
@@ -54,7 +53,7 @@ if not sys.warnoptions:
 def query(db, sql, args=(), one=False):
     cur = db.execute(sql, args)
     rv = [dict((cur.description[idx][0], value)
-          for idx, value in enumerate(row))
+               for idx, value in enumerate(row))
           for row in cur.fetchall()]
     cur.close()
 
@@ -73,7 +72,7 @@ def execute(db, sql, args=()):
 
 @get('/<username>/home')
 def getHomeTimeline(username):
-    logging.debug(f'getHomeTimeline(%r)', username)
+    logging.debug('getHomeTimeline(%r)', username)
     return {'timeline': []}
 
 
@@ -85,7 +84,7 @@ def getPublicTimeline():
 
 @get('/<username>/')
 def getUserTimeline(username):
-    logging.debug(f'getUserTimeline(%r)', username)
+    logging.debug('getUserTimeline(%r)', username)
     return {'timeline': []}
 
 
@@ -96,5 +95,5 @@ def postTweet(db, username):
     if not tweet:
         abort(400)
 
-    logging.debug(f'postTweet(%r, %r)', username, tweet['text'])
+    logging.debug('postTweet(%r, %r)', username, tweet['text'])
     response.status = 201

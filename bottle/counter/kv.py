@@ -67,11 +67,13 @@ def set_key():
         db[key] = req[key]
     return req
 
+
 # http localhost:5100/foo
 @get('/<key>')
 def get_key(key):
     db = bottle.local.db
     return {key: db.get(key)}
+
 
 # http DELETE localhost:5100/foo
 @delete('/<key>')
