@@ -30,7 +30,7 @@ def show_form():
     """
 
 
-@hug.post("/greet", output=hug.output_format.html, parse_body=True)
+@hug.post("/greet", output=hug.output_format.html)
 def show_greeting(first_name, last_name):
     full_name = f"{first_name} {last_name}"
     print(full_name)

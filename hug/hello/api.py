@@ -7,7 +7,7 @@ def server_static():
     return ("static",)
 
 
-@hug.get("/", output=hug.output_format.html)
+@hug.get("/")
 def show_form():
     hug.redirect.to("/static/form.html")
 
