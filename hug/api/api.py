@@ -17,6 +17,8 @@ config.read("./etc/api.ini")
 logging.config.fileConfig(config["logging"]["config"], disable_existing_loggers=False)
 
 
+# Arguments to inject into route functions
+#
 @hug.directive()
 def sqlite(section="sqlite", key="dbfile", **kwargs):
     dbfile = config[section][key]
@@ -28,6 +30,8 @@ def log(name=__name__, **kwargs):
     return logging.getLogger(name)
 
 
+# Routes
+#
 @hug.get("/books/")
 def books(db: sqlite):
     return {"books": db["books"].rows}
@@ -35,11 +39,11 @@ def books(db: sqlite):
 
 @hug.post("/books/", status=hug.falcon.HTTP_201)
 def create_book(
+    response,
     published: hug.types.number,
     author: hug.types.text,
     title: hug.types.text,
     first_sentence: hug.types.text,
-    response,
     db: sqlite,
 ):
     books = db["books"]
