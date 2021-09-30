@@ -7,12 +7,12 @@ from bottle.ext import sqlite
 
 # Set up app, plugins, and logging
 app = bottle.default_app()
-app.config.load_config('./etc/timelines.ini')
+app.config.load_config("./etc/timelines.ini")
 
-plugin = sqlite.Plugin(app.config['sqlite.dbfile'])
+plugin = sqlite.Plugin(app.config["sqlite.dbfile"])
 app.install(plugin)
 
-logging.config.fileConfig(app.config['logging.config'])
+logging.config.fileConfig(app.config["logging.config"])
 
 
 # Return errors in JSON
@@ -20,12 +20,12 @@ logging.config.fileConfig(app.config['logging.config'])
 # Adapted from <https://stackoverflow.com/a/39818780>
 #
 def json_error_handler(res):
-    if res.content_type == 'application/json':
+    if res.content_type == "application/json":
         return res.body
-    res.content_type = 'application/json'
-    if res.body == 'Unknown Error.':
+    res.content_type = "application/json"
+    if res.body == "Unknown Error.":
         res.body = bottle.HTTP_CODES[res.status_code]
-    return bottle.json_dumps({'error': res.body})
+    return bottle.json_dumps({"error": res.body})
 
 
 app.default_error_handler = json_error_handler
@@ -40,8 +40,9 @@ app.default_error_handler = json_error_handler
 #
 if not sys.warnoptions:
     import warnings
+
     for warning in [DeprecationWarning, ResourceWarning]:
-        warnings.simplefilter('ignore', warning)
+        warnings.simplefilter("ignore", warning)
 
 
 # Simplify DB access
@@ -52,9 +53,10 @@ if not sys.warnoptions:
 #
 def query(db, sql, args=(), one=False):
     cur = db.execute(sql, args)
-    rv = [dict((cur.description[idx][0], value)
-               for idx, value in enumerate(row))
-          for row in cur.fetchall()]
+    rv = [
+        dict((cur.description[idx][0], value) for idx, value in enumerate(row))
+        for row in cur.fetchall()
+    ]
     cur.close()
 
     return (rv[0] if rv else None) if one else rv
@@ -70,30 +72,31 @@ def execute(db, sql, args=()):
 
 # Routes
 
-@get('/<username>/home')
+
+@get("/<username>/home")
 def getHomeTimeline(username):
-    logging.debug('getHomeTimeline(%r)', username)
-    return {'timeline': []}
+    logging.debug("getHomeTimeline(%r)", username)
+    return {"timeline": []}
 
 
-@get('/')
+@get("/")
 def getPublicTimeline():
-    logging.debug('getPublicTimeline()')
-    return {'timeline': []}
+    logging.debug("getPublicTimeline()")
+    return {"timeline": []}
 
 
-@get('/<username>/')
+@get("/<username>/")
 def getUserTimeline(username):
-    logging.debug('getUserTimeline(%r)', username)
-    return {'timeline': []}
+    logging.debug("getUserTimeline(%r)", username)
+    return {"timeline": []}
 
 
-@post('/<username>/')
+@post("/<username>/")
 def postTweet(db, username):
     tweet = request.json
 
     if not tweet:
         abort(400)
 
-    logging.debug('postTweet(%r, %r)', username, tweet['text'])
+    logging.debug("postTweet(%r, %r)", username, tweet["text"])
     response.status = 201

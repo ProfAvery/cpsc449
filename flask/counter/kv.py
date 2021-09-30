@@ -11,28 +11,28 @@ import shelve
 from flask import Flask, g, request, jsonify
 
 app = Flask(__name__)
-app.config.from_envvar('APP_CONFIG')
+app.config.from_envvar("APP_CONFIG")
 
 DB = {}
 
 
 def get_db():
-    db = getattr(g, '_database', None)
+    db = getattr(g, "_database", None)
     if db is None:
-        db = g._database = shelve.open(app.config['KV_DBM'])
+        db = g._database = shelve.open(app.config["KV_DBM"])
     return db
 
 
 @app.teardown_appcontext
 def close_connection(exception):
-    db = getattr(g, '_database', None)
+    db = getattr(g, "_database", None)
     if db is not None:
         db.close()
 
 
 # Set
 # http $DB_URL foo=bar
-@app.route('/', methods=['POST'])
+@app.route("/", methods=["POST"])
 def set_key():
     req = request.get_json()
     if not req:
@@ -44,14 +44,14 @@ def set_key():
 
 # Get
 # http $DB_URL/foo
-@app.route('/<key>')
+@app.route("/<key>")
 def get_key(key):
     return jsonify({key: get_db().get(key)})
 
 
 # Delete
 # http DELETE $DB_URL/foo
-@app.route('/<key>', methods=['DELETE'])
+@app.route("/<key>", methods=["DELETE"])
 def delete_key(key):
     return jsonify({key: get_db().pop(key, None)})
 
@@ -59,12 +59,12 @@ def delete_key(key):
 # List
 # http $DB_URL
 # http $DB_URL?prefix=f
-@app.route('/')
+@app.route("/")
 def match():
     keys = get_db().keys()
-    prefix = request.args.get('prefix')
+    prefix = request.args.get("prefix")
     if prefix:
         matches = [k for k in keys if k.startswith(prefix)]
     else:
         matches = list(keys)
-    return jsonify({'keys': matches})
+    return jsonify({"keys": matches})

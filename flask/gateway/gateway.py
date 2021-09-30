@@ -12,9 +12,9 @@ import flask
 import requests
 
 app = flask.Flask(__name__)
-app.config.from_envvar('APP_CONFIG')
+app.config.from_envvar("APP_CONFIG")
 
-upstream = app.config['UPSTREAM']
+upstream = app.config["UPSTREAM"]
 
 
 @app.errorhandler(404)
@@ -31,17 +31,18 @@ def route_page(err):
         )
     except requests.exceptions.RequestException as e:
         app.log_exception(sys.exc_info())
-        return flask.json.jsonify({
-            'method': e.request.method,
-            'url': e.request.url,
-            'exception': type(e).__name__,
-        }), 503
+        return (
+            flask.json.jsonify(
+                {
+                    "method": e.request.method,
+                    "url": e.request.url,
+                    "exception": type(e).__name__,
+                }
+            ),
+            503,
+        )
 
-    headers = remove_item(
-        response.headers,
-        'Transfer-Encoding',
-        'chunked'
-    )
+    headers = remove_item(response.headers, "Transfer-Encoding", "chunked")
 
     return flask.Response(
         response=response.content,

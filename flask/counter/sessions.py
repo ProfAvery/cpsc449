@@ -6,7 +6,6 @@ from werkzeug.datastructures import CallbackDict
 
 
 class SessionStore:
-
     def __init__(self, logger=None):
         if logger is None:
             self.logger = logging.getLogger("__name__")
@@ -27,15 +26,12 @@ class SessionStore:
 
 
 class KeyValueSessionStore(SessionStore):
-
     def __init__(self, url, logger=None):
         super().__init__(logger)
 
 
 class ServerSideSession(CallbackDict, SessionMixin):
-
     def __init__(self, initial=None, sid=None):
-
         def on_update(self):
             self.modified = True
 
@@ -45,7 +41,6 @@ class ServerSideSession(CallbackDict, SessionMixin):
 
 
 class ServerSideSessionInterface(SessionInterface):
-
     def __init__(self, session_store):
         self.session_store = session_store
 
@@ -58,14 +53,14 @@ class ServerSideSessionInterface(SessionInterface):
             httponly=self.get_cookie_httponly(app),
             domain=self.get_cookie_domain(app),
             path=self.get_cookie_path(app),
-            secure=self.get_cookie_secure(app)
+            secure=self.get_cookie_secure(app),
         )
 
     def _delete_session(self, app, response, sid):
         response.delete_cookie(
             app.session_cookie_name,
             domain=self.get_cookie_domain(app),
-            path=self.get_cookie_path(app)
+            path=self.get_cookie_path(app),
         )
         self.session_store.delete_key(sid)
 

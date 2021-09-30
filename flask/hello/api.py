@@ -5,18 +5,16 @@ from flask import Flask, redirect, url_for, request, jsonify
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def show_form():
-    return redirect(url_for('static', filename='form.html'))
+    return redirect(url_for("static", filename="form.html"))
 
 
-@app.route('/greet', methods=['POST'])
+@app.route("/greet", methods=["POST"])
 def return_greeting():
     data = request.get_json()
 
     full_name = f"{data['first_name']} {data['last_name']}"
     app.logger.debug(full_name)
 
-    return jsonify({
-        'name': full_name
-    })
+    return jsonify({"name": full_name})
