@@ -16,13 +16,22 @@ config = configparser.ConfigParser()
 config.read("./etc/api.ini")
 logging.config.fileConfig(config["logging"]["config"], disable_existing_loggers=False)
 
+# SQL query tracing
+#
+def trace_logger(sql, params):
+    logger = logging.getLogger(__name__).getChild("sqlite_utils")
+    logger.debug("%r, %r", sql, params)
+
 
 # Arguments to inject into route functions
 #
 @hug.directive()
-def sqlite(section="sqlite", key="dbfile", **kwargs):
-    dbfile = config[section][key]
-    return sqlite_utils.Database(dbfile)
+def sqlite(**kwargs):
+    dbfile = config["sqlite"]["dbfile"]
+    if config["sqlite"].getboolean("tracer"):
+        return sqlite_utils.Database(dbfile, tracer=trace_logger)
+    else:
+        return sqlite_utils.Database(dbfile)
 
 
 @hug.directive()
