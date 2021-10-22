@@ -1,1 +1,1 @@
-api: gunicorn --access-logfile - --capture-output api:__hug_wsgi__
+api: gunicorn --bind=:$PORT --access-logfile - --capture-output api:__hug_wsgi__
