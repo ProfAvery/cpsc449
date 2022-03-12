@@ -10,9 +10,7 @@ import logging.config
 import sqlite3
 import typing
 
-from typing import Optional
-
-from fastapi import FastAPI, Depends, Response, status
+from fastapi import FastAPI, Depends, Response, HTTPException, status
 from pydantic import BaseModel, BaseSettings
 
 
@@ -63,22 +61,31 @@ def create_book(
             """
             INSERT INTO books(published, author, title, first_sentence)
             VALUES(:published, :author, :title, :first_sentence)
-        """,
-            dict(book),
+            """,
+            b,
         )
         db.commit()
     except sqlite3.IntegrityError as e:
-        response.status_code = status.HTTP_409_CONFLICT
-        return {"type": type(e).__name__, "msg": str(e)}
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={"type": type(e).__name__, "msg": str(e)},
+        )
     b["id"] = cur.lastrowid
     response.headers["Location"] = f"/books/{b['id']}"
     return b
 
 
 @app.get("/books/{id}")
-def retrieve_book(id: int, db: sqlite3.Connection = Depends(get_db)):
-    books = db.execute("SELECT * FROM books WHERE id = ? LIMIT 1", [id])
-    return {"books": books.fetchall()}
+def retrieve_book(
+    id: int, response: Response, db: sqlite3.Connection = Depends(get_db)
+):
+    cur = db.execute("SELECT * FROM books WHERE id = ? LIMIT 1", [id])
+    books = cur.fetchall()
+    if not books:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
+        )
+    return {"books": books}
 
 
 SearchParam = collections.namedtuple("SearchParam", ["name", "operator"])

@@ -4,10 +4,10 @@ PRAGMA foreign_keys=ON;
 BEGIN TRANSACTION;
 DROP TABLE IF EXISTS books;
 CREATE TABLE books (
-    id INTEGER primary key,
+    id INTEGER PRIMARY KEY,
     published INT,
     author VARCHAR,
-    title VARCHAR,       
+    title VARCHAR,
     first_sentence VARCHAR,
     UNIQUE(published, author, title)
 );
