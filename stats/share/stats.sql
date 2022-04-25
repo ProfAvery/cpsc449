@@ -26,7 +26,7 @@ CREATE VIEW wins
 AS
     SELECT
         user_id,
-        COUNT(won)
+        COUNT(won) AS wins
     FROM
         games
     WHERE
