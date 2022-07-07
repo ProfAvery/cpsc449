@@ -20,7 +20,7 @@ CREATE TABLE games(
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
-CREATE INDEX games_won_idx ON games(won);
+CREATE INDEX games_idx ON games(won, user_id, finished);
 
 CREATE VIEW wins
 AS
