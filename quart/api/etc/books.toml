@@ -1,0 +1,2 @@
+[DATABASES]
+URL = 'sqlite+aiosqlite:///var/books.db'
