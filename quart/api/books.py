@@ -54,7 +54,7 @@ def index():
         """
         <h1>Distant Reading Archive</h1>
         <p>A prototype API for distant reading of science fiction novels.</p>\n
-    """
+        """
     )
 
 
@@ -137,7 +137,6 @@ async def search():
     query_parameters = request.args
 
     sql = "SELECT * FROM books"
-
     conditions = []
     values = {}
 
