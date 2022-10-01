@@ -29,16 +29,17 @@ class Book:
     first_sentence: str
 
 
-async def _connect_db():
-    database = databases.Database(app.config["DATABASES"]["URL"])
-    await database.connect()
-    return database
+# Database connections on demand
+#   See <https://flask.palletsprojects.com/en/2.2.x/patterns/sqlite3/>
+#   and <https://www.encode.io/databases/connections_and_transactions/>
 
 
-def _get_db():
-    if not hasattr(g, "sqlite_db"):
-        g.sqlite_db = _connect_db()
-    return g.sqlite_db
+async def _get_db():
+    db = getattr(g, "_sqlite_db", None)
+    if db is None:
+        db = g._sqlite_db = databases.Database(app.config["DATABASES"]["URL"])
+        await db.connect()
+    return db
 
 
 @app.teardown_appcontext
@@ -141,7 +142,6 @@ async def search():
     values = {}
 
     for param in SEARCH_PARAMS:
-        app.logger.debug(f"{param}=")
         if query_parameters.get(param.name):
             if param.operator == "=":
                 conditions.append(f"{param.name} = :{param.name}")
