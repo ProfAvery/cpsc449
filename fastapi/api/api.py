@@ -11,15 +11,13 @@ import sqlite3
 import typing
 
 from fastapi import FastAPI, Depends, Response, HTTPException, status
-from pydantic import BaseModel, BaseSettings
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 
 
-class Settings(BaseSettings):
+class Settings(BaseSettings, env_file=".env", extra="ignore"):
     database: str
     logging_config: str
-
-    class Config:
-        env_file = ".env"
 
 
 class Book(BaseModel):
