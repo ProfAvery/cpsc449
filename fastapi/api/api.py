@@ -40,7 +40,7 @@ def get_logger():
 settings = Settings()
 app = FastAPI()
 
-logging.config.fileConfig(settings.logging_config)
+logging.config.fileConfig(settings.logging_config, disable_existing_loggers=False)
 
 
 @app.get("/books/")
