@@ -27,14 +27,15 @@ class Book(BaseModel):
     first_sentence: str
 
 
-def get_db():
-    with contextlib.closing(sqlite3.connect(settings.database)) as db:
-        db.row_factory = sqlite3.Row
-        yield db
-
-
 def get_logger():
     return logging.getLogger(__name__)
+
+
+def get_db(logger: logging.Logger = Depends(get_logger)):
+    with contextlib.closing(sqlite3.connect(settings.database)) as db:
+        db.row_factory = sqlite3.Row
+        db.set_trace_callback(logger.debug)
+        yield db
 
 
 settings = Settings()
@@ -114,7 +115,6 @@ def search(
     title: typing.Optional[str] = None,
     first_sentence: typing.Optional[str] = None,
     db: sqlite3.Connection = Depends(get_db),
-    logger: logging.Logger = Depends(get_logger),
 ):
     sql = "SELECT * FROM books"
 
@@ -135,7 +135,6 @@ def search(
         sql += " WHERE "
         sql += " AND ".join(conditions)
 
-    logger.debug(sql)
     books = db.execute(sql, values)
 
     return {"books": books.fetchall()}
